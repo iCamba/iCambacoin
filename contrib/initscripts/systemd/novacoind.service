@@ -1,0 +1,11 @@
+[Unit]
+Description=iCambaCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=iCambaCoin
+ExecStart=/opt/iCambaCoin/iCambaCoind
+
+[Install]
+WantedBy=multi-user.target

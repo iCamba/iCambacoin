@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=iCambaCoin
+Comment=iCambaCoin P2P Cryptocurrency
+Comment[ru]=iCambaCoin, P2P криптовалюта
+Comment[fr]=iCambaCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=iCambaCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/iCambaCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/iCambaCoin80.xpm
+MimeType=x-scheme-handler/iCambaCoin;
+Categories=Office;

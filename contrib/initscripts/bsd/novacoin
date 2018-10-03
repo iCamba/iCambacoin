@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: iCambaCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# iCambaCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable iCambaCoin service.
+# iCambaCoin_config (path): Set to /usr/local/etc/iCambaCoin.conf by default.
+# iCambaCoin_user:  The user account iCambaCoin daemon runs as. It uses 'root' user by default.
+# iCambaCoin_group: The group account iCambaCoin daemon runs as. It uses 'wheel' group by default.
+# iCambaCoin_datadir (str): Default to "/var/db/iCambaCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=iCambaCoin
+rcvar=iCambaCoin_enable
+
+: ${iCambaCoin_enable:=NO}
+: ${iCambaCoin_config=/usr/local/etc/iCambaCoin.conf}
+: ${iCambaCoin_datadir=/var/db/iCambaCoin}
+: ${iCambaCoin_user="root"}
+: ${iCambaCoin_group="wheel"}
+
+required_files=${iCambaCoin_config}
+command=/usr/local/bin/iCambaCoind
+iCambaCoin_chdir=${iCambaCoin_datadir}
+pidfile="${iCambaCoin_datadir}/iCambaCoind.pid"
+stop_cmd=iCambaCoin_stop
+command_args="-conf=${iCambaCoin_config} -datadir=${iCambaCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+iCambaCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${iCambaCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${iCambaCoin_user}:${iCambaCoin_group} ${iCambaCoin_datadir}
+}
+
+iCambaCoin_prestart()
+{
+	if [ ! -d "${iCambaCoin_datadir}/." ]; then
+		iCambaCoin_create_datadir || return 1
+	fi
+}
+
+iCambaCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+iCambaCoin_stop()
+{
+    iCambaCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${iCambaCoin_config} -datadir=${iCambaCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

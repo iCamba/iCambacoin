@@ -1,0 +1,5 @@
+iCambaCoin-qt usr/bin
+share/pixmaps/iCambaCoin32.xpm usr/share/pixmaps
+share/pixmaps/iCambaCoin80.xpm usr/share/pixmaps
+debian/iCambaCoin-qt.desktop usr/share/applications
+debian/iCambaCoin-qt.protocol usr/share/kde4/services/

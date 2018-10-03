@@ -1,0 +1,2 @@
+debian/bin/iCambaCoind usr/bin
+src/iCambaCoind usr/lib/iCambaCoin
